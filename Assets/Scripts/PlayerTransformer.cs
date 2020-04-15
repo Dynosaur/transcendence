@@ -1,24 +1,25 @@
 ﻿using UnityEngine;
 
-public class PlayerTransformer : MonoBehaviour {
+public class PlayerTransformer {
 
+    private GameObject playerModel;
     private float playerSpeed = 0.01F;
 
-    public void Update() {
-        Forward(Input.GetAxis("Vertical"));
-        Sideways(Input.GetAxis("Horizontal"));
-        RotateHorizontal(Input.GetAxis("Mouse X"));
+
+    public PlayerTransformer(GameObject playerObject) {
+        playerModel = playerObject;
     }
 
-    private void Forward(float amount) {
-        transform.Translate(Vector3.forward * amount * playerSpeed);
+    public void Forward(float amount) {
+        playerModel.transform.Translate(Vector3.forward * amount * playerSpeed);
     }
 
-    private void Sideways(float amount) {
-        transform.Translate(Vector3.right * amount * playerSpeed);
+    public void Sideways(float amount) {
+        playerModel.transform.Translate(Vector3.right * amount * playerSpeed);
     }
 
-    private void RotateHorizontal(float amount) {
-        transform.Rotate(Vector3.up * amount);
+    public void RotateHorizontal(float amount) {
+        playerModel.transform.Rotate(Vector3.up * amount);
     }
+
 }

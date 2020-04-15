@@ -1,41 +1,27 @@
 ﻿using UnityEngine;
 
-public class CameraTransformer : MonoBehaviour {
+public class CameraTransformer {
 
+    private GameObject camera;
     private Vector3 cameraOffset;
-    private GameObject player;
 
-    private int maxCameraDepression = -45;
-    private int maxCameraElevation = 45;
+    private int maxCameraDepression = 80;
+    private int maxCameraElevation = 280;
 
-    public void Start() {
+    public CameraTransformer(GameObject cameraObject) {
+        camera = cameraObject;
         cameraOffset = new Vector3(0, 3, 0);
-        player = GameObject.Find("Player");
     }
 
-    public void Update() {
-        transform.position = player.transform.position + cameraOffset;
-        Debug.Log(transform.rotation.z);
-        RotateVertical(Input.GetAxis("Mouse Y"));
-        RotateHorizontal(Input.GetAxis("Mouse X"));
-    }
-
-    private void RotateVertical(float amount) {
-        if (amount > 0 && -transform.rotation.x * 180 >= maxCameraElevation) {
+    public void RotateVertical(float amount) {
+        var x = camera.transform.rotation.eulerAngles.x;
+        if (x > 0 && x < 180 && amount < 0 && x - amount > maxCameraDepression)
             return;
-        }
-        if (amount < 0 && -transform.rotation.x * 180 <= maxCameraDepression) {
+        if (x > 180 && x < 360 && amount > 0 && x - amount < maxCameraElevation)
             return;
-        }
-        Quaternion q = transform.rotation;
+        Quaternion q = camera.transform.rotation;
         q.eulerAngles = new Vector3(q.eulerAngles.x - amount, q.eulerAngles.y, 0);
-        transform.rotation = q;
-    }
-
-    private void RotateHorizontal(float amount) {
-        Quaternion q = transform.rotation;
-        q.eulerAngles = new Vector3(q.eulerAngles.x, q.eulerAngles.y + amount, 0);
-        transform.rotation = q;
+        camera.transform.rotation = q;
     }
 
 }
